@@ -1,6 +1,5 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
 export default function Layout() {
   return (
     <>
@@ -14,7 +13,7 @@ export default function Layout() {
           }}
         />
         <Stack.Screen
-          name="transactions"
+          name="receive"
           options={{
             presentation: "modal",
             headerShown: false,

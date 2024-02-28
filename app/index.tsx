@@ -3,10 +3,12 @@ import Icon from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import TransactionHistoryPopup from "@/components/Popup";
+import { Link } from "expo-router";
 
 export default function Page() {
   const [isModalVisible, setModalVisible] = useState(false);
   function handleReceive() {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     console.log("receive button");
   }
   function handleSend() {
@@ -43,13 +45,12 @@ export default function Page() {
           <Text className="text-5xl text-white">$125.42</Text>
         </View>
         <View className="flex-row items-center justify-center w-full px-4 space-x-8">
-          <Pressable
-            className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
-            onPress={handleReceive}
-          >
-            <Icon name="qr-code-outline" size={24} color="#fff" />
-            <Text className="text-white text-center">Receive</Text>
-          </Pressable>
+          <Link href="/receive" onPress={handleReceive}>
+            <View className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4">
+              <Icon name="qr-code-outline" size={24} color="#fff" />
+              <Text className="text-white text-center">Receive</Text>
+            </View>
+          </Link>
           <Pressable
             className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
             onPress={handleSend}
