@@ -43,15 +43,17 @@ export default function App() {
         </View>
         <View className="flex-row items-center justify-center w-full px-4 space-x-8">
           <Pressable
-            className="w-36 py-4 rounded-md bg-gray-800"
+            className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-gray-800 space-x-4"
             onPress={handleReceive}
           >
+            <Icon name="qr-code-outline" size={24} color="#fff" />
             <Text className="text-white text-center">Receive</Text>
           </Pressable>
           <Pressable
-            className="w-36 py-4 rounded-md bg-gray-800"
+            className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-gray-800 space-x-4"
             onPress={handleSend}
           >
+            <Icon name="send-outline" size={24} color="#fff" />
             <Text className="text-white text-center">Send</Text>
           </Pressable>
         </View>
