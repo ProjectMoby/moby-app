@@ -1,10 +1,11 @@
-import Keyring from "@polkadot/keyring";
-import { StatusBar } from "expo-status-bar";
-import { Pressable, Text, View } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+import { Modal, Button, Pressable, Text, View } from "react-native";
+import Icon from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
+import { useState } from "react";
+import TransactionHistoryPopup from "@/components/Popup";
 
-export default function App() {
+export default function Page() {
+  const [isModalVisible, setModalVisible] = useState(false);
   function handleReceive() {
     console.log("receive button");
   }
@@ -12,8 +13,9 @@ export default function App() {
     console.log("send button");
   }
 
-  function handleViewTrandacionButton() {
+  function handleViewTransacionButton() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setModalVisible(!isModalVisible);
     console.log("transaction button pressed");
   }
 
@@ -23,10 +25,9 @@ export default function App() {
 
   return (
     <>
-      <StatusBar style="light" />
-      <View className="flex-1 items-center bg-black space-y-4 pt-24">
+      <View className="flex-1 items-center bg-black space-y-4 pt-12">
         <View className="w-full flex-row items-center justify-end px-6 space-x-6">
-          <Pressable onPress={handleViewTrandacionButton}>
+          <Pressable onPress={handleViewTransacionButton}>
             <Icon name="time-outline" size={24} color="#fff" />
           </Pressable>
           <Pressable onPress={handleViewSettingsButton}>
@@ -43,14 +44,14 @@ export default function App() {
         </View>
         <View className="flex-row items-center justify-center w-full px-4 space-x-8">
           <Pressable
-            className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-gray-800 space-x-4"
+            className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
             onPress={handleReceive}
           >
             <Icon name="qr-code-outline" size={24} color="#fff" />
             <Text className="text-white text-center">Receive</Text>
           </Pressable>
           <Pressable
-            className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-gray-800 space-x-4"
+            className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
             onPress={handleSend}
           >
             <Icon name="send-outline" size={24} color="#fff" />
@@ -58,6 +59,10 @@ export default function App() {
           </Pressable>
         </View>
       </View>
+      <TransactionHistoryPopup
+        isVisible={isModalVisible}
+        toggleModal={handleViewTransacionButton}
+      />
     </>
   );
 }
