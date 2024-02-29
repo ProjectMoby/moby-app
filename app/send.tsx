@@ -15,6 +15,7 @@ export default function Page() {
     enterRecipientAddress: true,
     enterAmountToSend: false,
     confirmTransaction: false,
+    postTransaction: false,
   });
 
   function handleScanButton() {
@@ -46,15 +47,25 @@ export default function Page() {
 
   function handleTransact() {
     console.log("Sending", amount, "USDT from", address, "TO", recipient);
+
+    // Show post transaction status screen
+    setSteps({
+      enterRecipientAddress: false,
+      enterAmountToSend: false,
+      confirmTransaction: false,
+      postTransaction: true,
+    });
   }
 
   return (
     <View className="bg-[#1a1a1a] h-full flex items-center pt-8 ">
-      <Link href="/" asChild>
-        <Pressable className="absolute right-0 p-1 m-4 mt-12 rounded-full bg-[#d4d4d4]">
-          <Icon name="close-outline" size={16} color="#000" />
-        </Pressable>
-      </Link>
+      {!steps.postTransaction && (
+        <Link href="/" asChild>
+          <Pressable className="absolute right-0 p-1 m-4 mt-12 rounded-full bg-[#d4d4d4]">
+            <Icon name="close-outline" size={16} color="#000" />
+          </Pressable>
+        </Link>
+      )}
       {steps.enterAmountToSend && (
         <Pressable
           className="absolute left-0 p-1 m-4 mt-12"
@@ -63,6 +74,7 @@ export default function Page() {
               enterRecipientAddress: true,
               enterAmountToSend: false,
               confirmTransaction: false,
+              postTransaction: false,
             })
           }
         >
@@ -78,6 +90,7 @@ export default function Page() {
               enterRecipientAddress: false,
               enterAmountToSend: true,
               confirmTransaction: false,
+              postTransaction: false,
             })
           }
         >
@@ -176,6 +189,35 @@ export default function Page() {
               </View>
             </>
           )}
+          {steps.postTransaction && (
+            <View className="flex items-center justify-center h-full space-y-8">
+              <View className="flex items-center justify-center space-y-4">
+                <Icon
+                  name="checkmark-circle-outline"
+                  size={100}
+                  color="#279d54"
+                />
+                <Text className="text-white text-xl">Transaction sent</Text>
+                <View className="w-2/3">
+                  <Text className="text-[#515151] text-center">
+                    Your account will update once the blockchain has confirmed
+                    the transaction.
+                  </Text>
+                </View>
+              </View>
+              <View className="flex items-center justify-center space-y-4">
+                <Link href="https://westmint.statescan.io" asChild>
+                  <Pressable className="bg-[#242424] p-4 rounded-lg">
+                    <Text className="text-white">View Detail</Text>
+                  </Pressable>
+                </Link>
+
+                <Link href="/" asChild>
+                  <Text className="text-white">Close</Text>
+                </Link>
+              </View>
+            </View>
+          )}
         </View>
         <View className="w-full h-1/6 flex items-center">
           <>
@@ -187,6 +229,7 @@ export default function Page() {
                     enterRecipientAddress: false,
                     enterAmountToSend: true,
                     confirmTransaction: false,
+                    postTransaction: false,
                   })
                 }
               >
@@ -202,6 +245,7 @@ export default function Page() {
                     enterRecipientAddress: false,
                     enterAmountToSend: false,
                     confirmTransaction: true,
+                    postTransaction: false,
                   })
                 }
               >
