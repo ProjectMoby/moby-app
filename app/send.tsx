@@ -97,9 +97,9 @@ export default function Page() {
         </Pressable>
       )}
       <Text className="text-white text-lg p-4">
-        {steps.enterRecipientAddress && "Enter Recipient Address"}
+        {steps.enterRecipientAddress && "Enter recipient address"}
         {steps.enterAmountToSend && "Enter amount"}
-        {steps.confirmTransaction && "Comfirm Transaction"}
+        {steps.confirmTransaction && "Comfirm transaction"}
       </Text>
       <View className="w-full h-full">
         <View className="h-4/5 ">
@@ -144,7 +144,7 @@ export default function Page() {
                     keyboardType="numeric"
                     placeholder="0.0"
                     placeholderTextColor="#515151"
-                    className="text-4xl text-white"
+                    className="text-4xl text-white w-full"
                     onChangeText={handleAmountChange}
                     onSubmitEditing={handleAmountSubmit}
                     value={amount as string}
