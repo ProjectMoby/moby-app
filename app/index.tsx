@@ -108,12 +108,14 @@ export default function Page() {
           </Link>
         </View>
       </View>
-      <TransactionHistoryPopup
-        isVisible={isModalVisible}
-        toggleModal={handleViewTransacionButton}
-        data={data || mock}
-        address={account.address}
-      />
+      {data && (
+        <TransactionHistoryPopup
+          isVisible={isModalVisible}
+          toggleModal={handleViewTransacionButton}
+          data={data}
+          address={account.address}
+        />
+      )}
     </>
   );
 }
