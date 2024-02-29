@@ -4,15 +4,14 @@ import QRCode from "react-native-qrcode-svg";
 import Icon from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { Link } from "expo-router";
+import { useWeb3 } from "@/components/Web3Provider";
 
 export default function Page() {
-  const [address] = useState(
-    "5D7DY1pkNdiL8Yn9uyc2AMjggdGtEjePJbKwun1udkYbxJsZ"
-  );
+  const { account } = useWeb3()!;
   function handleCopyAddress() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     //TODO copy address to clipboard
-    console.log(address);
+    console.log(account.address);
     Alert.alert("Address copied");
   }
 
@@ -27,10 +26,10 @@ export default function Page() {
       <View className="flex items-center justify-center mt-12 space-y-8">
         <Text className="text-white text-lg  "> 🟢 Polkadot Asset Hub</Text>
         <View className="bg-white p-4 rounded-md">
-          <QRCode value={address} size={200} />
+          <QRCode value={account.address} size={200} />
         </View>
         <View className="bg-[#272727] p-2 rounded-lg">
-          <Text className="text-white text-xs">{address}</Text>
+          <Text className="text-white text-xs">{account.address}</Text>
         </View>
         <Pressable
           className="flex flex-row items-center justify-center space-x-2 bg-[#242424] px-4 py-2 rounded-lg"

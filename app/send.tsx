@@ -3,11 +3,10 @@ import Icon from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { Link } from "expo-router";
+import { useWeb3 } from "@/components/Web3Provider";
 
 export default function Page() {
-  const [address] = useState(
-    "5D7DY1pkNdiL8Yn9uyc2AMjggdGtEjePJbKwun1udkYbxJsZ"
-  );
+  const { account, api } = useWeb3()!;
   const [recipient, setRecipient] = useState<string | null>(null);
   const [amount, setAmount] = useState<string | null>(null);
   const [steps, setSteps] = useState({
@@ -44,8 +43,46 @@ export default function Page() {
     console.log("Amount submit: ", amount);
   }
 
-  function handleTransact() {
-    console.log("Sending", amount, "USDT from", address, "TO", recipient);
+  async function handleTransact() {
+    console.log(
+      "Sending",
+      amount,
+      "USDT from",
+      account.address,
+      "TO",
+      recipient
+    );
+
+    const transferExtrinsic = api.tx.assets.transferKeepAlive(
+      8,
+      recipient,
+      BigInt(amount)
+    );
+
+    transferExtrinsic
+      .signAndSend(
+        account,
+        {
+          assetId: {
+            parents: 0,
+            interior: {
+              X2: [{ PalletInstance: 50 }, { GeneralIndex: 8 }],
+            },
+          },
+        },
+        ({ status }) => {
+          if (status.isInBlock) {
+            console.log(
+              `Completed at block hash #${status.asInBlock.toString()}`
+            );
+          } else {
+            console.log(`Current status: ${status.type}`);
+          }
+        }
+      )
+      .catch((error: any) => {
+        console.log(":( transaction failed", error);
+      });
 
     // Show post transaction status screen
     setSteps({
@@ -162,7 +199,7 @@ export default function Page() {
               <View className="border-b-2 border-[#515151] mx-4 py-12 space-y-12">
                 <View className="mx-4 space-y-4">
                   <Text className="text-[#515151] text-xl">From</Text>
-                  <Text className="text-white text-xs">{address}</Text>
+                  <Text className="text-white text-xs">{account.address}</Text>
                 </View>
                 <View className="mx-4 space-y-4">
                   <Text className="text-[#515151] text-xl">To</Text>

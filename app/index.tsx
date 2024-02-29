@@ -32,11 +32,15 @@ export default function Page() {
   }
 
   useEffect(() => {
-    (async () => {
+    const fetchBalance = async () => {
       const query_result = await api.query.assets.account(8, account.address);
       const { balance: account_balance } = query_result.toJSON();
       setBalance(account_balance);
-    })();
+    };
+
+    fetchBalance();
+    const intervalId = setInterval(fetchBalance, 30000);
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
