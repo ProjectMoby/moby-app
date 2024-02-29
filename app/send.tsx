@@ -8,7 +8,6 @@ export default function Page() {
   const [address] = useState(
     "5D7DY1pkNdiL8Yn9uyc2AMjggdGtEjePJbKwun1udkYbxJsZ"
   );
-  const [continueVisible, setContinueVisible] = useState<boolean>(false);
   const [recipient, setRecipient] = useState<string | null>(null);
   const [amount, setAmount] = useState<string | null>(null);
   const [steps, setSteps] = useState({

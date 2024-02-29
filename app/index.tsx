@@ -23,6 +23,7 @@ export default function Page() {
   }
 
   function handleViewSettingsButton() {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     console.log("settings button pressed");
   }
 
@@ -33,13 +34,15 @@ export default function Page() {
           <Pressable onPress={handleViewTransacionButton}>
             <Icon name="time-outline" size={24} color="#fff" />
           </Pressable>
-          <Pressable onPress={handleViewSettingsButton}>
-            <Icon
-              name="ellipsis-horizontal-circle-outline"
-              size={24}
-              color="#fff"
-            />
-          </Pressable>
+          <Link href="/settings" asChild>
+            <Pressable onPress={handleViewSettingsButton}>
+              <Icon
+                name="ellipsis-horizontal-circle-outline"
+                size={24}
+                color="#fff"
+              />
+            </Pressable>
+          </Link>
         </View>
         <View className="w-full flex items-center justify-center space-y-4 py-12">
           <Text className="text-md text-white">USDT balance</Text>
