@@ -4,12 +4,11 @@ import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
 import TransactionHistoryPopup from "@/components/Popup";
 import { Link } from "expo-router";
-import { Keyring, WsProvider, ApiPromise } from "@polkadot/api";
-const { mnemonicGenerate } = require("@polkadot/util-crypto");
 import { formatBalance } from "@polkadot/util";
-import { MNEMONICS } from "@env";
+import { useWeb3 } from "@/components/Web3Provider";
 
 export default function Page() {
+  const { account, api } = useWeb3()!;
   const [isModalVisible, setModalVisible] = useState(false);
   const [balance, setBalance] = useState<string | undefined>();
   function handleReceive() {
@@ -33,14 +32,8 @@ export default function Page() {
   }
 
   useEffect(() => {
-    // const MNEMONICS = mnemonicGenerate();
-    const keyring = new Keyring({ type: "sr25519" });
-    const newPair = keyring.addFromUri(MNEMONICS);
-
     (async () => {
-      const wsProvider = new WsProvider("wss://westmint-rpc-tn.dwellir.com");
-      const api = await ApiPromise.create({ provider: wsProvider });
-      const query_result = await api.query.assets.account(8, newPair.address);
+      const query_result = await api.query.assets.account(8, account.address);
       const { balance: account_balance } = query_result.toJSON();
       setBalance(account_balance);
     })();

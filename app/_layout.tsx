@@ -1,8 +1,9 @@
+import { Web3Provider } from "@/components/Web3Provider";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 export default function AppLayout() {
   return (
-    <>
+    <Web3Provider>
       <Stack>
         <Stack.Screen
           name="index"
@@ -35,6 +36,6 @@ export default function AppLayout() {
         />
       </Stack>
       <StatusBar style="light" />
-    </>
+    </Web3Provider>
   );
 }
