@@ -1,25 +1,17 @@
-import { Modal, Button, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
 import TransactionHistoryPopup from "@/components/Popup";
 import { Link } from "expo-router";
 import { Keyring, WsProvider, ApiPromise } from "@polkadot/api";
-const {
-  mnemonicGenerate,
-  mnemonicToMiniSecret,
-  mnemonicValidate,
-  ed25519PairFromSeed,
-} = require("@polkadot/util-crypto");
+const { mnemonicGenerate } = require("@polkadot/util-crypto");
+import { formatBalance } from "@polkadot/util";
 import { MNEMONICS } from "@env";
 
 export default function Page() {
-  // const wsProvider = new WsProvider("wss://westend-asset-hub-rpc.polkadot.io");
-  // ApiPromise.create({ provider: wsProvider }).then((api) => {
-  //   console.log(api);
-  // });
-
   const [isModalVisible, setModalVisible] = useState(false);
+  const [balance, setBalance] = useState<string | undefined>();
   function handleReceive() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     console.log("receive button");
@@ -42,10 +34,16 @@ export default function Page() {
 
   useEffect(() => {
     // const MNEMONICS = mnemonicGenerate();
-    // console.log(MNEMONICS);
     const keyring = new Keyring({ type: "sr25519" });
     const newPair = keyring.addFromUri(MNEMONICS);
-    console.log(newPair.address);
+
+    (async () => {
+      const wsProvider = new WsProvider("wss://westmint-rpc-tn.dwellir.com");
+      const api = await ApiPromise.create({ provider: wsProvider });
+      const query_result = await api.query.assets.account(8, newPair.address);
+      const { balance: account_balance } = query_result.toJSON();
+      setBalance(account_balance);
+    })();
   }, []);
 
   return (
@@ -66,8 +64,11 @@ export default function Page() {
           </Link>
         </View>
         <View className="w-full flex items-center justify-center space-y-4 py-12">
-          <Text className="text-md text-white">USDT balance</Text>
-          <Text className="text-5xl text-white">$125.42</Text>
+          <Text className="text-md text-white">Joe Test Token balance</Text>
+          <Text className="text-5xl text-white">
+            {"$"}
+            {formatBalance(balance, { decimals: 3, withUnit: false })}
+          </Text>
         </View>
         <View className="flex-row items-center justify-center w-full px-4 space-x-8">
           <Link href="/receive" asChild>
