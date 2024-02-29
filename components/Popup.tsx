@@ -1,13 +1,18 @@
 import React from "react";
 import { View, Modal, Text, Pressable, FlatList } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
+import Identicon from "@polkadot/reactnative-identicon";
 
 export default function Popup({
   isVisible,
   toggleModal,
+  data,
+  address,
 }: {
   isVisible: boolean;
   toggleModal: () => void;
+  data: any; //Todo define data type
+  address: string;
 }) {
   return (
     <Modal
@@ -30,22 +35,31 @@ export default function Popup({
           <View className="h-full">
             {/* transaction list */}
             <FlatList
-              data={[
-                { key: "1", amount: "-$12.11" },
-                { key: "2", amount: "+$1.81" },
-              ]}
+              data={data.items}
               renderItem={({ item }) => (
                 <Pressable className="w-full border-b-2 border-[#515151] pt-4 pb-2 flex flex-row items-center justify-between">
                   <View className="flex-1 flex-row space-x-4">
-                    <View className="w-12 h-12 bg-white rounded-full" />
-                    <View className="flex items-center justify-center space-y-2">
-                      <Text className="text-white">15AW...wZud</Text>
-                      <Text className="text-[#515151]">2024/02/23</Text>
+                    <Identicon
+                      value={item.to !== address ? item.to : item.from}
+                      size={36}
+                    />
+                    <View className="flex items-start justify-center space-y-2">
+                      <Text className="text-white">
+                        {item.to !== address ? item.to : item.from}
+                      </Text>
+                      <Text className="text-[#515151]">
+                        {new Date(item.indexer.blockTime).toLocaleString()}
+                      </Text>
                     </View>
                   </View>
                   <View className="flex flex-row items-center justify-center space-x-4">
-                    <Text key={item.key} className="text-white">
-                      {item.amount}
+                    <Text
+                      key={`${item.indexer.blockHeight}-${item.indexer.eventIndex}`}
+                      className="text-white"
+                    >
+                      {`${item.from === address ? "-" : "+"} ${
+                        item.balance / 1000
+                      } ${item.symbol}`}
                     </Text>
                     <Icon
                       name="chevron-forward-outline"

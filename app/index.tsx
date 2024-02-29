@@ -6,11 +6,13 @@ import TransactionHistoryPopup from "@/components/Popup";
 import { Link } from "expo-router";
 import { formatBalance } from "@polkadot/util";
 import { useWeb3 } from "@/components/Web3Provider";
+import mock from "@/mock";
 
 export default function Page() {
   const { account, api } = useWeb3()!;
   const [isModalVisible, setModalVisible] = useState(false);
   const [balance, setBalance] = useState<string | undefined>();
+  const [data, setData] = useState();
   function handleReceive() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     console.log("receive button");
@@ -40,6 +42,24 @@ export default function Page() {
 
     fetchBalance();
     const intervalId = setInterval(fetchBalance, 30000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://westmint-api.statescan.io/accounts/5D4VYJQztwSB23WFDacs84Kj5dDRrrr6dUaVG52tGdusXTmj/transfers?page=0&page_size=25"
+        );
+        const jsonData = await response.json();
+        setData(jsonData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+    const intervalId = setInterval(fetchData, 60000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -91,6 +111,8 @@ export default function Page() {
       <TransactionHistoryPopup
         isVisible={isModalVisible}
         toggleModal={handleViewTransacionButton}
+        data={data || mock}
+        address={account.address}
       />
     </>
   );
