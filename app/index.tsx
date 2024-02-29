@@ -1,12 +1,16 @@
-import { Modal, Button, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TransactionHistoryPopup from "@/components/Popup";
 import { Link } from "expo-router";
+import { formatBalance } from "@polkadot/util";
+import { useWeb3 } from "@/components/Web3Provider";
 
 export default function Page() {
+  const { account, api } = useWeb3()!;
   const [isModalVisible, setModalVisible] = useState(false);
+  const [balance, setBalance] = useState<string | undefined>();
   function handleReceive() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     console.log("receive button");
@@ -27,6 +31,18 @@ export default function Page() {
     console.log("settings button pressed");
   }
 
+  useEffect(() => {
+    const fetchBalance = async () => {
+      const query_result = await api.query.assets.account(8, account.address);
+      const { balance: account_balance } = query_result.toJSON();
+      setBalance(account_balance);
+    };
+
+    fetchBalance();
+    const intervalId = setInterval(fetchBalance, 30000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <>
       <View className="flex-1 items-center bg-black space-y-4 pt-12">
@@ -45,8 +61,11 @@ export default function Page() {
           </Link>
         </View>
         <View className="w-full flex items-center justify-center space-y-4 py-12">
-          <Text className="text-md text-white">USDT balance</Text>
-          <Text className="text-5xl text-white">$125.42</Text>
+          <Text className="text-md text-white">Joe Test Token balance</Text>
+          <Text className="text-5xl text-white">
+            {"$"}
+            {formatBalance(balance, { decimals: 3, withUnit: false })}
+          </Text>
         </View>
         <View className="flex-row items-center justify-center w-full px-4 space-x-8">
           <Link href="/receive" asChild>
