@@ -3,6 +3,7 @@ import * as Haptics from "expo-haptics";
 import QRCode from "react-native-qrcode-svg";
 import Icon from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
+import { Link } from "expo-router";
 
 export default function Page() {
   const [address] = useState(
@@ -17,7 +18,12 @@ export default function Page() {
 
   return (
     <View className="bg-[#1a1a1a] h-full flex items-center ">
-      <Text className="text-white text-lg font-bold p-4">Receive USDT</Text>
+      <Link href="/" asChild>
+        <Pressable className="absolute right-0 p-1 m-4 rounded-full bg-[#d4d4d4]">
+          <Icon name="close-outline" size={16} color="#000" />
+        </Pressable>
+      </Link>
+      <Text className="text-white text-lg p-4">Receive USDT</Text>
       <View className="flex items-center justify-center mt-12 space-y-8">
         <Text className="text-white text-lg  "> 🟢 Polkadot Asset Hub</Text>
         <View className="bg-white p-4 rounded-md">

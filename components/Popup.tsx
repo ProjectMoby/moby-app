@@ -19,9 +19,7 @@ export default function Popup({
       <View className="flex-1 items-center justify-end">
         <View className="bg-[#1a1a1a] w-full h-3/4 p-4 rounded-t-3xl">
           <View className="flex flex-row justify-center items-center p-1 pb-4">
-            <Text className="text-white text-lg font-bold">
-              Transaction history
-            </Text>
+            <Text className="text-white text-lg">Transaction history</Text>
           </View>
           <Pressable
             className="absolute right-0 p-1 m-4 rounded-full bg-[#d4d4d4]"

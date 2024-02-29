@@ -12,6 +12,7 @@ export default function Page() {
     console.log("receive button");
   }
   function handleSend() {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     console.log("send button");
   }
 
@@ -45,19 +46,24 @@ export default function Page() {
           <Text className="text-5xl text-white">$125.42</Text>
         </View>
         <View className="flex-row items-center justify-center w-full px-4 space-x-8">
-          <Link href="/receive" onPress={handleReceive}>
-            <View className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4">
+          <Link href="/receive" asChild>
+            <Pressable
+              className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
+              onPress={handleReceive}
+            >
               <Icon name="qr-code-outline" size={24} color="#fff" />
               <Text className="text-white text-center">Receive</Text>
-            </View>
+            </Pressable>
           </Link>
-          <Pressable
-            className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
-            onPress={handleSend}
-          >
-            <Icon name="send-outline" size={24} color="#fff" />
-            <Text className="text-white text-center">Send</Text>
-          </Pressable>
+          <Link href="/send" asChild>
+            <Pressable
+              className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
+              onPress={handleSend}
+            >
+              <Icon name="send-outline" size={24} color="#fff" />
+              <Text className="text-white text-center">Send</Text>
+            </Pressable>
+          </Link>
         </View>
       </View>
       <TransactionHistoryPopup
