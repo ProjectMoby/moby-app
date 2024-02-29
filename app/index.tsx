@@ -1,11 +1,24 @@
 import { Modal, Button, Pressable, Text, View } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TransactionHistoryPopup from "@/components/Popup";
 import { Link } from "expo-router";
+import { Keyring, WsProvider, ApiPromise } from "@polkadot/api";
+const {
+  mnemonicGenerate,
+  mnemonicToMiniSecret,
+  mnemonicValidate,
+  ed25519PairFromSeed,
+} = require("@polkadot/util-crypto");
+import { MNEMONICS } from "@env";
 
 export default function Page() {
+  // const wsProvider = new WsProvider("wss://westend-asset-hub-rpc.polkadot.io");
+  // ApiPromise.create({ provider: wsProvider }).then((api) => {
+  //   console.log(api);
+  // });
+
   const [isModalVisible, setModalVisible] = useState(false);
   function handleReceive() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -26,6 +39,14 @@ export default function Page() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     console.log("settings button pressed");
   }
+
+  useEffect(() => {
+    // const MNEMONICS = mnemonicGenerate();
+    // console.log(MNEMONICS);
+    const keyring = new Keyring({ type: "sr25519" });
+    const newPair = keyring.addFromUri(MNEMONICS);
+    console.log(newPair.address);
+  }, []);
 
   return (
     <>
