@@ -1,9 +1,11 @@
-import { Alert, Button, Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { Link } from "expo-router";
 import { useWeb3 } from "@/components/Web3Provider";
+import QRCodeScanner from "@/components/QRCodeScanner";
+import { formatBalance } from "@polkadot/util";
 
 export default function Page() {
   const { account, api } = useWeb3()!;
@@ -11,6 +13,7 @@ export default function Page() {
   const [amount, setAmount] = useState<string | null>(null);
   const [steps, setSteps] = useState({
     enterRecipientAddress: true,
+    scanQRCode: false,
     enterAmountToSend: false,
     confirmTransaction: false,
     postTransaction: false,
@@ -19,6 +22,13 @@ export default function Page() {
   function handleScanButton() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     console.log("Scan button");
+    setSteps({
+      enterRecipientAddress: false,
+      scanQRCode: true,
+      enterAmountToSend: false,
+      confirmTransaction: false,
+      postTransaction: false,
+    });
   }
 
   function handleRecipientChange(text: string) {
@@ -36,18 +46,18 @@ export default function Page() {
 
   function handleAmountChange(text: string) {
     setAmount(text);
-    console.log(text);
   }
 
   function handleAmountSubmit() {
-    console.log("Amount submit: ", amount);
+    console.log("Amount submit: ", parseFloat(amount) * 1000);
   }
 
   async function handleTransact() {
+    const amountToSend = parseFloat(amount) * 1000;
     console.log(
       "Sending",
-      amount,
-      "USDT from",
+      amountToSend,
+      "JOE from",
       account.address,
       "TO",
       recipient
@@ -56,7 +66,7 @@ export default function Page() {
     const transferExtrinsic = api.tx.assets.transferKeepAlive(
       8,
       recipient,
-      BigInt(amount)
+      BigInt(amountToSend)
     );
 
     transferExtrinsic
@@ -87,6 +97,7 @@ export default function Page() {
     // Show post transaction status screen
     setSteps({
       enterRecipientAddress: false,
+      scanQRCode: false,
       enterAmountToSend: false,
       confirmTransaction: false,
       postTransaction: true,
@@ -102,12 +113,29 @@ export default function Page() {
           </Pressable>
         </Link>
       )}
+      {steps.scanQRCode && (
+        <Pressable
+          className="absolute left-0 p-1 m-4 mt-12"
+          onPress={() =>
+            setSteps({
+              enterRecipientAddress: true,
+              scanQRCode: false,
+              enterAmountToSend: false,
+              confirmTransaction: false,
+              postTransaction: false,
+            })
+          }
+        >
+          <Icon name="chevron-back-outline" size={24} color="#d4d4d4" />
+        </Pressable>
+      )}
       {steps.enterAmountToSend && (
         <Pressable
           className="absolute left-0 p-1 m-4 mt-12"
           onPress={() =>
             setSteps({
               enterRecipientAddress: true,
+              scanQRCode: false,
               enterAmountToSend: false,
               confirmTransaction: false,
               postTransaction: false,
@@ -124,6 +152,7 @@ export default function Page() {
           onPress={() =>
             setSteps({
               enterRecipientAddress: false,
+              scanQRCode: false,
               enterAmountToSend: true,
               confirmTransaction: false,
               postTransaction: false,
@@ -137,6 +166,7 @@ export default function Page() {
         {steps.enterRecipientAddress && "Enter recipient address"}
         {steps.enterAmountToSend && "Enter amount"}
         {steps.confirmTransaction && "Comfirm transaction"}
+        {steps.scanQRCode && "Scan QR Code"}
       </Text>
       <View className="w-full h-full">
         <View className="h-4/5 ">
@@ -168,6 +198,10 @@ export default function Page() {
             </>
           )}
 
+          {steps.scanQRCode && (
+            <QRCodeScanner setRecipient={setRecipient} setSteps={setSteps} />
+          )}
+
           {steps.enterAmountToSend && (
             <>
               <View>
@@ -188,7 +222,7 @@ export default function Page() {
                   />
                 </View>
                 <Text className="absolute bottom-0 right-0 text-4xl text-white pr-4 pb-4">
-                  USDT
+                  JOE
                 </Text>
               </View>
             </>
@@ -210,17 +244,17 @@ export default function Page() {
               <View className="mx-4 px-4 py-12 space-y-4 border-b-2 border-[#515151]">
                 <View className="flex flex-row items-center justify-between">
                   <Text className="text-[#515151] text-xl">Amount</Text>
-                  <Text className="text-white text-xl">{amount} USDT</Text>
+                  <Text className="text-white text-xl">{amount} JOE</Text>
                 </View>
                 <View className="flex flex-row items-center justify-between">
                   <Text className="text-[#515151] text-xl">Network Fee</Text>
-                  <Text className="text-white text-xl">0.01 USDT</Text>
+                  <Text className="text-white text-xl">0.653 JOE</Text>
                 </View>
               </View>
               <View className="flex flex-row items-center justify-between mx-4 p-4">
                 <Text className="text-[#515151] text-xl">Total</Text>
                 <Text className="text-white text-xl">
-                  {parseFloat(amount) + 0.01} USDT
+                  {parseFloat(amount) + 0.653} JOE
                 </Text>
               </View>
             </>
@@ -263,6 +297,7 @@ export default function Page() {
                 onPress={() =>
                   setSteps({
                     enterRecipientAddress: false,
+                    scanQRCode: false,
                     enterAmountToSend: true,
                     confirmTransaction: false,
                     postTransaction: false,
@@ -279,6 +314,7 @@ export default function Page() {
                 onPress={() =>
                   setSteps({
                     enterRecipientAddress: false,
+                    scanQRCode: false,
                     enterAmountToSend: false,
                     confirmTransaction: true,
                     postTransaction: false,

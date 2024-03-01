@@ -22,7 +22,7 @@ export default function Page() {
           <Icon name="close-outline" size={16} color="#000" />
         </Pressable>
       </Link>
-      <Text className="text-white text-lg p-4">Receive USDT</Text>
+      <Text className="text-white text-lg p-4">Receive JOE</Text>
       <View className="flex items-center justify-center mt-12 space-y-8">
         <Text className="text-white text-lg  "> 🟢 Polkadot Asset Hub</Text>
         <View className="bg-white p-4 rounded-md">
