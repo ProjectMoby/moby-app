@@ -2,12 +2,12 @@ import { Alert, Pressable, Text, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import QRCode from "react-native-qrcode-svg";
 import Icon from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
 import { Link } from "expo-router";
 import { useWeb3 } from "@/components/Web3Provider";
 
 export default function Page() {
   const { account } = useWeb3()!;
+
   function handleCopyAddress() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     //TODO copy address to clipboard
@@ -24,7 +24,7 @@ export default function Page() {
       </Link>
       <Text className="text-white text-lg p-4">Receive JOE</Text>
       <View className="flex items-center justify-center mt-12 space-y-8">
-        <Text className="text-white text-lg  "> 🟢 Polkadot Asset Hub</Text>
+        <Text className="text-white text-lg  "> Westend Asset Hub</Text>
         <View className="bg-white p-4 rounded-md">
           <QRCode value={account.address} size={200} />
         </View>
