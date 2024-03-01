@@ -69,7 +69,7 @@ export const Web3Provider: React.FC<{ children: ReactNode }> = ({
     // const MNEMONICS = mnemonicGenerate();
 
     (async () => {
-      await saveMnemonics(MNEMONICS);
+      // await saveMnemonics(MNEMONICS);
       const mnemonics = await readMnemonics();
       const keyring = new Keyring({ type: "sr25519" });
       const newPair = keyring.addFromUri(mnemonics!);
