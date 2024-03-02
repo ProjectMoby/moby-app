@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View } from "react-native";
 import { Camera } from "expo-camera";
 
 export default function QRCodeScanner({ setRecipient, setSteps }) {

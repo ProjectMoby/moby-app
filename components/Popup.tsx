@@ -2,6 +2,7 @@ import React from "react";
 import { View, Modal, Text, Pressable, FlatList } from "react-native";
 import Icon from "@expo/vector-icons/Ionicons";
 import Identicon from "@polkadot/reactnative-identicon";
+import { Link } from "expo-router";
 
 export default function Popup({
   isVisible,
@@ -61,11 +62,16 @@ export default function Popup({
                           item.balance / 1000
                         } ${item.symbol}`}
                       </Text>
-                      <Icon
-                        name="chevron-forward-outline"
-                        size={24}
-                        color="#515151"
-                      />
+                      <Link
+                        href={`https://westmint.statescan.io/#/events/${item.indexer.blockHeight}-${item.indexer.eventIndex}`}
+                        asChild
+                      >
+                        <Icon
+                          name="chevron-forward-outline"
+                          size={24}
+                          color="#515151"
+                        />
+                      </Link>
                     </View>
                   </Pressable>
                 )}

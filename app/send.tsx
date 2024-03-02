@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Link } from "expo-router";
 import { useWeb3 } from "@/components/Web3Provider";
 import QRCodeScanner from "@/components/QRCodeScanner";
-import { formatBalance } from "@polkadot/util";
 import { useAuth } from "@/components/AuthProvider";
 
 export default function Page() {
