@@ -50,19 +50,26 @@ tx.signAndSend(
 
 // My modifications
 
-// 1. I did not use web3 extension injection to get the account. I used polkadot.js library to generate a mnemonics, and establish a keypair with the mnemonics.
+// 1. I did not use web3 extension injection to get the account. 
+// I used polkadot.js library to generate a mnemonics, 
+// and establish a keypair with the mnemonics.
+
 const keyring = new Keyring({ type: "sr25519" });
 const newPair = keyring.addFromUri(newMnemonics!);
 setAccount(newPair);
 
 // 2. I called assets.transferKeepAlive.
+
 const transferExtrinsic = api.tx.assets.transferKeepAlive(
   8,
   recipient,
   BigInt(amountToSend)
 );
 
-// 3. I supplied an asset_id in the signAndSend function's options to trigger ChargeAssetTxPayment, paying transaction fee with a sufficient token (Joe Test Token).
+// 3. I supplied an asset_id in the signAndSend function's options 
+// to trigger ChargeAssetTxPayment, paying transaction fee with a 
+// sufficient token (Joe Test Token).
+
 transferExtrinsic
   .signAndSend(
     account,
