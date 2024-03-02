@@ -9,8 +9,10 @@ import { Keyring } from "@polkadot/api";
 const { mnemonicGenerate } = require("@polkadot/util-crypto");
 import { MNEMONICS } from "@env";
 import { KeyringPair } from "@polkadot/keyring/types";
-import { Image, Pressable, Text, View } from "react-native";
+import { Alert, Image, Pressable, Text, View } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import * as Haptics from "expo-haptics";
+import * as Clipboard from "expo-clipboard";
 import * as LocalAuthentication from "expo-local-authentication";
 import Icon from "@expo/vector-icons/Ionicons";
 
@@ -73,6 +75,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setNewMnemonics(MNEMONICS);
   }
 
+  async function handleCopy() {
+    try {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      await Clipboard.setStringAsync(newMnemonics!);
+      Alert.alert("Mnemonics copied to clipboard.");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     (async () => {
       try {
@@ -99,9 +111,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
               Write down your mnemonics
             </Text>
             <View className="flex-1 items-center justify-center mx-4">
-              <View className="bg-[#272727] w-full rounded-md p-8">
+              <Text className="text-white text-center pb-4">
+                Click to copy mnemonics
+              </Text>
+              <Pressable
+                className="bg-[#272727] w-full rounded-md p-8"
+                onPress={handleCopy}
+              >
                 <Text className="text-white">{newMnemonics}</Text>
-              </View>
+              </Pressable>
             </View>
             <View className="flex-1 items-center justify-center space-y-8 mx-4">
               <View className="bg-[#261415] w-full rounded-md p-8">

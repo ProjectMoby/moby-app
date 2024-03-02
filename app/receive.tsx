@@ -1,5 +1,6 @@
 import { Alert, Pressable, Text, View } from "react-native";
 import * as Haptics from "expo-haptics";
+import * as Clipboard from "expo-clipboard";
 import QRCode from "react-native-qrcode-svg";
 import Icon from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
@@ -8,11 +9,14 @@ import { useAuth } from "@/components/AuthProvider";
 export default function Page() {
   const { account } = useAuth()!;
 
-  function handleCopyAddress() {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    //TODO copy address to clipboard
-    console.log(account.address);
-    Alert.alert("Address copied");
+  async function handleCopyAddress() {
+    try {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      await Clipboard.setStringAsync(account.address);
+      Alert.alert("Address copied to clipboard.");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

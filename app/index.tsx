@@ -4,7 +4,7 @@ import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
 import TransactionHistoryPopup from "@/components/Popup";
 import { Link } from "expo-router";
-import { formatBalance, isNull } from "@polkadot/util";
+import { formatBalance } from "@polkadot/util";
 import { useWeb3 } from "@/components/Web3Provider";
 import { useAuth } from "@/components/AuthProvider";
 import { Codec } from "@polkadot/types-codec/types";
