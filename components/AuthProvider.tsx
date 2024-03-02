@@ -106,30 +106,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return (
       <>
         {newMnemonics ? (
-          <View className="bg-[#1a1a1a] h-full flex items-center pt-8">
+          <View className="bg-[#1a1a1a] h-full flex items-center pt-8 px-4">
             <Text className="text-white text-lg p-4">
               Write down your mnemonics
             </Text>
-            <View className="flex-1 items-center justify-center mx-4">
-              <Text className="text-white text-center pb-4">
-                Click to copy mnemonics
-              </Text>
+            <View className="w-full flex-1 items-center justify-center">
               <Pressable
-                className="bg-[#272727] w-full rounded-md p-8"
+                className="bg-[#272727] w-full rounded-lg p-8"
                 onPress={handleCopy}
               >
-                <Text className="text-white">{newMnemonics}</Text>
+                <Text className="text-white text-center pb-8">
+                  Click to copy mnemonics
+                </Text>
+                {newMnemonics.split(" ").map((word) => (
+                  <Text key={word} className="text-white">
+                    {word}
+                  </Text>
+                ))}
               </Pressable>
             </View>
             <View className="flex-1 items-center justify-center space-y-8 mx-4">
-              <View className="bg-[#261415] w-full rounded-md p-8">
+              <View className="bg-[#261415] w-full rounded-lg p-8">
                 <Text className="text-white">
                   By pressing Confirm, you confirm that you have written down
                   the mnemonics.
                 </Text>
               </View>
               <Pressable
-                className="bg-[#eb422f] flex flex-row items-center justify-center space-x-4 p-4 rounded-md"
+                className="bg-[#eb422f] flex flex-row items-center justify-center space-x-4 p-4 rounded-lg"
                 onPress={saveMnemonics}
               >
                 <Text className="text-white">Comfirm</Text>
@@ -149,7 +153,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             </View>
             <View className="h-1/4 items-center justify-center">
               <Pressable
-                className="bg-[#242424] flex flex-row items-center justify-center space-x-4 p-4 rounded-md"
+                className="bg-[#242424] flex flex-row items-center justify-center space-x-4 p-4 rounded-lg"
                 onPress={handleGenerateNewMnemonics}
               >
                 <Icon name="person-outline" color="#fff" size={24} />

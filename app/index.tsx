@@ -105,7 +105,7 @@ export default function Page() {
         <View className="flex-row items-center justify-center w-full px-4 space-x-8">
           <Link href="/receive" asChild>
             <Pressable
-              className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
+              className="flex flex-row items-center justify-center w-36 py-4 rounded-lg bg-[#242424] space-x-4"
               onPress={handleReceive}
             >
               <Icon name="qr-code-outline" size={24} color="#fff" />
@@ -114,7 +114,7 @@ export default function Page() {
           </Link>
           <Link href="/send" asChild>
             <Pressable
-              className="flex flex-row items-center justify-center w-36 py-4 rounded-md bg-[#242424] space-x-4"
+              className="flex flex-row items-center justify-center w-36 py-4 rounded-lg bg-[#242424] space-x-4"
               onPress={handleSend}
             >
               <Icon name="send-outline" size={24} color="#fff" />

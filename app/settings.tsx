@@ -34,8 +34,12 @@ export default function Page() {
           <Text className="text-white">View mnemonics</Text>
         </Pressable>
         {mnemonics && (
-          <View className="bg-[#272727] w-2/3 rounded-sm p-4">
-            <Text className="text-white text-md">{mnemonics}</Text>
+          <View className="bg-[#272727] w-2/3 rounded-lg p-4">
+            {mnemonics.split(" ").map((word) => (
+              <Text key={word} className="text-white">
+                {word}
+              </Text>
+            ))}
           </View>
         )}
       </View>

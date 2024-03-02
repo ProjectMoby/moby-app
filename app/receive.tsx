@@ -29,7 +29,7 @@ export default function Page() {
       <Text className="text-white text-lg p-4">Receive JOE</Text>
       <View className="flex items-center justify-center mt-12 space-y-8">
         <Text className="text-white text-lg  "> Westend Asset Hub</Text>
-        <View className="bg-white p-4 rounded-md">
+        <View className="bg-white p-4 rounded-lg">
           <QRCode value={account.address} size={200} />
         </View>
         <View className="bg-[#272727] p-2 rounded-lg">
