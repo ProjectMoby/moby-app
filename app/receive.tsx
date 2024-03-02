@@ -3,10 +3,10 @@ import * as Haptics from "expo-haptics";
 import QRCode from "react-native-qrcode-svg";
 import Icon from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
-import { useWeb3 } from "@/components/Web3Provider";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function Page() {
-  const { account } = useWeb3()!;
+  const { account } = useAuth()!;
 
   function handleCopyAddress() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

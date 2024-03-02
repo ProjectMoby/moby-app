@@ -4,12 +4,14 @@ import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
 import TransactionHistoryPopup from "@/components/Popup";
 import { Link } from "expo-router";
-import { formatBalance } from "@polkadot/util";
+import { formatBalance, isNull } from "@polkadot/util";
 import { useWeb3 } from "@/components/Web3Provider";
-import mock from "@/mock";
+import { useAuth } from "@/components/AuthProvider";
+import { Codec } from "@polkadot/types-codec/types";
 
 export default function Page() {
-  const { account, api } = useWeb3()!;
+  const { api } = useWeb3()!;
+  const { account } = useAuth()!;
   const [isModalVisible, setModalVisible] = useState(false);
   const [balance, setBalance] = useState<string | undefined>();
   const [data, setData] = useState();
@@ -34,22 +36,36 @@ export default function Page() {
   }
 
   useEffect(() => {
+    interface QueryResult {
+      balance?: string;
+    }
+
     const fetchBalance = async () => {
-      const query_result = await api.query.assets.account(8, account.address);
-      const { balance: account_balance } = query_result.toJSON();
-      setBalance(account_balance);
+      try {
+        const query_result: Codec | null = await api.query.assets.account(
+          8,
+          account.address
+        );
+        const { balance: accountBalance } =
+          query_result.toJSON() as QueryResult;
+        setBalance(accountBalance ?? "0");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchBalance();
+
     const intervalId = setInterval(fetchBalance, 30000);
+
     return () => clearInterval(intervalId);
-  }, []);
+  }, [account, api]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://westmint-api.statescan.io/accounts/5D4VYJQztwSB23WFDacs84Kj5dDRrrr6dUaVG52tGdusXTmj/transfers?page=0&page_size=25"
+          `https://westmint-api.statescan.io/accounts/${account.address}/transfers?page=0&page_size=25`
         );
         const jsonData = await response.json();
         setData(jsonData);
@@ -57,11 +73,10 @@ export default function Page() {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
     const intervalId = setInterval(fetchData, 60000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [account]);
 
   return (
     <>

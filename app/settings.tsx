@@ -4,9 +4,10 @@ import * as Haptics from "expo-haptics";
 import Icon from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { useWeb3 } from "@/components/Web3Provider";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function Page() {
-  const { readMnemonics } = useWeb3()!;
+  const { readMnemonics } = useAuth()!;
   const [mnemonics, setMnemonics] = useState<string>();
 
   async function handleViewMnemonics() {

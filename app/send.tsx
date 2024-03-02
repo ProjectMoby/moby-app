@@ -6,9 +6,11 @@ import { Link } from "expo-router";
 import { useWeb3 } from "@/components/Web3Provider";
 import QRCodeScanner from "@/components/QRCodeScanner";
 import { formatBalance } from "@polkadot/util";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function Page() {
-  const { account, api } = useWeb3()!;
+  const { api } = useWeb3()!;
+  const { account } = useAuth()!;
   const [recipient, setRecipient] = useState<string | null>(null);
   const [amount, setAmount] = useState<string | null>(null);
   const [steps, setSteps] = useState({
@@ -105,7 +107,7 @@ export default function Page() {
   }
 
   return (
-    <View className="bg-[#1a1a1a] h-full flex items-center pt-8 ">
+    <View className="bg-[#1a1a1a] h-full flex items-center pt-8">
       {!steps.postTransaction && (
         <Link href="/" asChild>
           <Pressable className="absolute right-0 p-1 m-4 mt-12 rounded-full bg-[#d4d4d4]">
